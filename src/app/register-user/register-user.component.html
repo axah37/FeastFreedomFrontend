@@ -1,0 +1,91 @@
+<app-navbar></app-navbar>
+<div class='center-field'>
+<h1>User Registration</h1>
+<form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <div>
+  <mat-form-field appearance="outline" class='field'>
+    <mat-label>First Name</mat-label>
+    <input matInput type='text' formControlName='userFirstName'>
+  </mat-form-field>
+  </div>
+
+  <div>
+  <mat-form-field appearance="outline" class='field'>
+    <mat-label>Last Name</mat-label>
+    <input matInput type='text' formControlName='userLastName'>
+  </mat-form-field>
+  </div>
+
+  <div>
+  <mat-form-field appearance="outline" class='field'>
+    <mat-label>Email</mat-label>
+    <input matInput type='email' formControlName='userEmail'>
+  </mat-form-field>
+  </div>
+
+  <div>
+  <mat-form-field appearance="outline" class='field'>
+    <mat-label>Password</mat-label>
+    <input matInput type='password' formControlName='userPassword'>
+    <div *ngIf='userPassword.invalid && (userPassword.dirty || userPassword.touched)'>
+      <div *ngIf='userPassword.errors.minlength'>Minimum Length of 6</div>
+    </div>
+  </mat-form-field>
+  </div>
+
+  <div>
+  <mat-form-field appearance="outline" class='field'>
+    <mat-label>Confirmed Password</mat-label>
+    <input matInput type='password' formControlName='confirmedPassword' >
+    <div *ngIf='confirmedPassword.invalid && (confirmedPassword.dirty || confirmedPassword.touched)'>
+      <div *ngIf='confirmedPassword.errors.matchError'>Passwords must match</div>
+    </div>
+  </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline" class='field'>
+      <mat-label>Security Question 1</mat-label>
+      <input matInput type='text' formControlName='userSecurityQuestionOne'>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline" class='field'>
+      <mat-label>Answer</mat-label>
+      <input matInput type='text' formControlName='userAnswerOne'>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline" class='field'>
+      <mat-label>Security Question 2</mat-label>
+      <input matInput type='text' formControlName='userSecurityQuestionTwo'>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline" class='field'>
+      <mat-label>Answer</mat-label>
+      <input matInput type='text' formControlName='userAnswerTwo'>
+    </mat-form-field>
+  </div>
+  <div>
+    <a
+      mat-raised-button
+      color="accent"
+      [disabled]='submitted'
+      (click)="cancel()"
+      >Cancel</a
+    >
+
+    <button
+      mat-raised-button
+      color="primary"
+      [disabled]='!userForm.valid || submitted'
+    >
+      Register
+    </button>
+  </div>
+</form>
+</div>

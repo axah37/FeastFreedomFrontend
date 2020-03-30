@@ -1,0 +1,225 @@
+<app-navbar></app-navbar>
+
+<form
+  #registerForm="ngForm"
+  (ngSubmit)="onSubmit(registerForm)"
+  class="center-form"
+>
+  <div [ngModelGroup]="'provider'" [hidden]="hidden">
+    <div>
+      <mat-form-field class="center-field" appearance="outline">
+        <mat-label>Provider Name</mat-label>
+        <input
+          matInput
+          type="text"
+          name="providerName"
+          #providerName="ngModel"
+          ngModel
+          required
+        />
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="center-field" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          name="providerEmail"
+          ngModel
+          #providerEmail="ngModel"
+          required
+        />
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="center-field" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          type="password"
+          name="providerPassword"
+          ngModel
+          #providerPassword="ngModel"
+          required
+          minlength="6"
+        />
+        <div *ngIf='providerPassword.invalid && (providerPassword.dirty || providerPassword.touched)'>
+          <div *ngIf='providerPassword.errors.minlength'>Passwords must be at least 6 characters</div>
+        </div>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="center-field" appearance="outline">
+        <mat-label>Confirm Password</mat-label>
+        <input
+          matInput
+          type="password"
+          name="confirmed_password"
+          ngModel
+          #providerConfirmedPassword="ngModel"
+          required
+          appMustMatch
+        />
+        <div *ngIf='providerConfirmedPassword.invalid && (providerConfirmedPassword.dirty || providerConfirmedPassword.touched)'>
+          <div *ngIf='providerConfirmedPassword.errors.matchError'>Passwords must match</div>
+        </div>
+      </mat-form-field>
+    </div>
+    <div class="center-field">
+      <a
+        [style.margin]="'0 5% 0 30%'"
+        mat-raised-button
+        color="accent"
+        (click)="cancel()"
+        >Cancel</a
+      >
+
+      <a
+        mat-raised-button
+        color="primary"
+        (click)="
+          !(
+            providerName.valid &&
+            providerEmail.valid &&
+            providerPassword.valid &&
+            providerConfirmedPassword.valid
+          ) === true || next()
+        "
+        [disabled]="
+          !(
+            providerName.valid &&
+            providerEmail.valid &&
+            providerPassword.valid &&
+            providerConfirmedPassword.valid
+          )
+        "
+        >Next</a
+      >
+    </div>
+  </div>
+  <div [hidden]="!hidden">
+    <div [ngModelGroup]="'provider'">
+      <input
+        type="file"
+        accept="image/*"
+        (change)="onFileSelected($event)"
+        name="imgInput"
+        ngModel
+        hidden
+        #imgInput
+        required
+      />
+      <a (click)="imgInput.click()">
+        <img
+          class="img-container"
+          [src]="'../../assets/uploadImage.png'"
+          *ngIf="imageURL == null"
+        />
+        <img
+          class="img-container"
+          [src]="imageURL"
+          *ngIf="imageURL && imageURL !== ''"
+        />
+      </a>
+    </div>
+    <fieldset [ngModelGroup]="'hours'" class="field-container">
+      <div [style.text-align]="'center'">Hours Of Operation<span *ngIf="requiredHour">*</span>
+      </div>
+
+      <fieldset [ngModelGroup]="i" *ngFor="let day of days; let i = index">
+        <div class="small">{{ day.dayOfWeek | dayOfWeek }}</div>
+        <input
+          type="number"
+          name="dayOfWeek"
+          [ngModel]="day.dayOfWeek"
+          hidden
+        />
+        <mat-checkbox name="open" [(ngModel)]="day.open" (change)="openCount()"></mat-checkbox>
+        <mat-form-field class="large">
+          <mat-label>Open</mat-label>
+          <mat-select ngModel name="start" [disabled]="!day.open" required (change)="openCount()">
+            <mat-option matInput *ngFor="let hour of hours" [value]="hour">
+              {{ hour }}:00
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="large">
+          <mat-label>Close</mat-label>
+          <mat-select ngModel name="end" [disabled]="!day.open" required appOpenClose="'start'" #selectEnd="ngModel" (change)="openCount()">
+            <mat-option matInput *ngFor="let hour of hours" [value]="hour">
+              {{ hour }}:00
+            </mat-option>
+          </mat-select>
+          <div *ngIf="selectEnd.invalid && (selectEnd.touched || selectEnd.dirty)">
+            <small *ngIf="selectEnd.errors.openCloseError">Close Before Open?</small>
+          </div>
+        </mat-form-field>
+      </fieldset>
+    </fieldset>
+    <br />
+    <fieldset [ngModelGroup]="'items'" class="field-container">
+      <span [style.padding-left]="'50%'">Menu</span>
+      <small *ngIf="requiredItem">*</small>
+
+      <a
+        [style.float]="'right'"
+        mat-raised-button
+        color="accent"
+        [disabled]='submitted'
+        (click)="addItem()"
+        >Add Item</a
+      >
+      <table class="table" *ngIf="items.length !== 0">
+        <thead>
+          <th>Item Name</th>
+          <th>Vegetarian</th>
+          <th>Item Price</th>
+          <th>Delete Item</th>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of items; let i = index">
+            <td>{{ item.itemName }}</td>
+            <td>{{ item.vegetarian ? "Veg" : "Non-Veg" }}</td>
+            <td>{{ item.itemPrice | currency }}</td>
+            <td>
+              <a mat-raised-button color="accent" (click)="deleteItem(i)" [disabled]='submitted'
+                >Delete</a
+              >
+            </td>
+            <div [ngModelGroup]="i" hidden>
+              <input [ngModel]="item.itemName" name="itemName" hidden />
+              <input [ngModel]="item.vegetarian" name="vegetarian" hidden />
+              <input [ngModel]="item.itemPrice" name="itemPrice" hidden />
+            </div>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+
+    <div class="center-field">
+      <a
+        [style.margin]="'5% 5% 0 30%'"
+        mat-raised-button
+        color="accent"
+        [disabled]='submitted'
+        (click)="next()"
+        >Back</a
+      >
+
+      <button
+        [style.margin-bottom]="'5%'"
+        mat-raised-button
+        color="primary"
+        [disabled]="!(registerForm.valid && !requiredHour && !requiredItem) || submitted"
+      >
+        Register
+      </button>
+    </div>
+  </div>
+</form>

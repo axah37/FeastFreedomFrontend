@@ -1,0 +1,169 @@
+<span *ngIf='provider'>
+<app-navbar [user]="provider.providerName"></app-navbar>
+</span>
+<div *ngIf="!editing" class="center-form">
+  <div class="field-container">
+      <img [src]='imgURI' [style.width]='"60%"'>
+
+    <a [style.float]="'right'" mat-raised-button color="accent" (click)="edit()"
+      >Edit Details</a
+    >
+  </div>
+
+  <div class="field-container">
+    <h2>Hours</h2>
+    <table class="table" *ngIf="hours.length !== 0">
+      <thead>
+        <th>Day Week</th>
+        <th>Open Time</th>
+        <th>Close time</th>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let hour of hours">
+          <td>{{ hour.dayOfWeek | dayOfWeek }}</td>
+          <td>{{ hour.start }}:00</td>
+          <td>{{ hour.end }}:00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr />
+  <div class="field-container">
+    <h2>Items</h2>
+    <table class="table" *ngIf="items.length !== 0">
+      <thead>
+        <th>Item Name</th>
+        <th>Vegetarian</th>
+        <th>Item Price</th>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of items; let i = index">
+          <td>{{ item.itemName }}</td>
+          <td>{{ item.vegetarian ? "Veg" : "Non-Veg" }}</td>
+          <td>{{ item.itemPrice | currency }}</td>
+          <td>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="editing">
+  <form #editForm="ngForm" class="center-form" (ngSubmit)="onSubmit(editForm)">
+    <fieldset [ngModelGroup]="'provider'" hidden>
+      <input [ngModel]="provider.providerId" name="providerId" hidden />
+    </fieldset>
+
+
+    <fieldset [ngModelGroup]="'hours'" class="field-container">
+      <div [style.text-align]="'center'">Hours Of Operation</div>
+
+      <fieldset [ngModelGroup]="i" *ngFor="let day of days; let i = index">
+        <div class="small">{{ day.dayOfWeek | dayOfWeek }}</div>
+
+        <input [ngModel]='day.hourId' name="hourId" hidden/>
+        <input
+          type="number"
+          name="dayOfWeek"
+          [ngModel]="day.dayOfWeek"
+          hidden
+        />
+        <mat-checkbox name="open" [(ngModel)]="day.open"></mat-checkbox>
+        <mat-form-field class="large">
+          <mat-label>Open</mat-label>
+          <mat-select
+            ngModel
+            [(ngModel)]="day.start"
+            name="start"
+            [disabled]="!day.open"
+            required
+          >
+            <mat-option matInput *ngFor="let hour of hoursArray" [value]="hour">
+              {{ hour }}:00
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="large">
+          <mat-label>Close</mat-label>
+          <mat-select
+            ngModel
+            name="end"
+            [disabled]="!day.open"
+            [(ngModel)]="day.end"
+            required
+            appOpenClose="'start'"
+            #selectEnd="ngModel"
+          >
+            <mat-option matInput *ngFor="let hour of hoursArray" [value]="hour">
+              {{ hour }}:00
+            </mat-option>
+          </mat-select>
+          <div
+            *ngIf="selectEnd.invalid && (selectEnd.touched || selectEnd.dirty)"
+          >
+            <small *ngIf="selectEnd.errors.openCloseError"
+              >Close Before Open?</small
+            >
+          </div>
+        </mat-form-field>
+      </fieldset>
+    </fieldset>
+
+    <hr />
+
+    <fieldset [ngModelGroup]="'items'" class="field-container">
+      <span [style.padding-left]="'50%'">Menu</span>
+
+      <a
+        [style.float]="'right'"
+        mat-raised-button
+        color="accent"
+        [disabled]='submitted'
+        (click)="addItem()"
+        >Add Item</a
+      >
+      <table class="table" *ngIf="editItems.length !== 0">
+        <thead>
+          <th>Item Name</th>
+          <th>Vegetarian</th>
+          <th>Item Price</th>
+          <th>Delete Item</th>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of editItems; let i = index">
+            <td>{{ item.itemName }}</td>
+            <td>{{ item.vegetarian ? "Veg" : "Non-Veg" }}</td>
+            <td>{{ item.itemPrice | currency }}</td>
+            <td>
+              <a mat-raised-button color="accent" [disabled]='submitted' (click)="deleteItem(i, item.itemId)"
+                >Delete</a
+              >
+            </td>
+            <div [ngModelGroup]="i" hidden>
+              <input [ngModel]="item.itemId" name="itemId" hidden />
+              <input [ngModel]="item.itemName" name="itemName" hidden />
+              <input [ngModel]="item.vegetarian" name="vegetarian" hidden />
+              <input [ngModel]="item.itemPrice" name="itemPrice" hidden />
+            </div>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+    <br>
+    <hr>
+    <br>
+    <div class="field-container">
+      <a mat-raised-button color="accent" [disabled]='submitted' (click)="cancel()">Cancel</a>
+      <button mat-raised-button
+      [disabled]='!(editForm.valid && (!editForm.pristine || itemAdded)) || submitted'
+      >Save Change</button>
+    </div>
+    <br>
+  </form>
+</div>

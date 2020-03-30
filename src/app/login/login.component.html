@@ -1,27 +1,31 @@
 <app-navbar></app-navbar>
 
 <div class="container">
-  <form class="center-form" [style.background]="">
+<h1 [style.text-align]='"center"'><b><em>Feast Freedom</em></b></h1>
+  <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)" class="center-form" [style.background]="">
+    <p class="center-field" *ngIf="error">{{error}}</p>
     <div>
       <mat-form-field class="center-field" appearance="outline">
         <mat-label>Username</mat-label>
-        <input type="text" matInput />
+        <input name="username" type="text" matInput ngModel required/>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="center-field" appearance="outline">
         <mat-label>Password</mat-label>
-        <input type="password" matInput />
+        <input name="password" type="password" matInput ngModel required/>
       </mat-form-field>
     </div>
+    <br>
+    <div [style.text-align]="'center'">
+      <button mat-raised-button color="primary" [disabled]='!loginForm.valid'>Sign On</button>
+    </div>
+    <br>
     <div [style.text-align]="'right'" [style.margin-right]="'33%'">
-      <small><a href="">Register as a Provider</a></small>
+      <small><a [routerLink]="['/register/provider']">Register as a Provider</a></small>
     </div>
     <div [style.text-align]="'right'" [style.margin-right]="'33%'" >
-      <small><a href="">Register as a User</a></small>
-    </div>
-    <div [style.text-align]="'center'">
-      <button mat-raised-button color="primary">Sign On</button>
+      <small><a [routerLink]="['/register/user']">Register as a User</a></small>
     </div>
   </form>
 </div>

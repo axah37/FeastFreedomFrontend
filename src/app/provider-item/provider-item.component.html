@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Add Item</h1>
+<div mat-dialog-content>
+<form #itemForm='ngForm'>
+  <div>
+      <label>Item Name</label>
+      <input type="text" name='itemName' [(ngModel)]='item.itemName' required>
+</div>
+
+<div>
+  <label>Veg?</label>
+  <input type="checkbox" name='vegetarian' [(ngModel)]='item.vegetarian'>
+</div>
+
+<div>
+  <label>Item Price</label>
+  <input type="number" name="itemPrice" [(ngModel)]='item.itemPrice' required>
+</div>
+</form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]='item' [disabled]='!itemForm.valid'>Add</button>
+</div>

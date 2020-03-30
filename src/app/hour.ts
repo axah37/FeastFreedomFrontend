@@ -8,9 +8,11 @@ export class Hour {
   private _start:number;
   private _end:number;
 
-  constructor(_dayOfWeek:number, _open:boolean){
+  constructor(_dayOfWeek:number, _open:boolean, _start:number, _end:number){
     this._dayOfWeek=_dayOfWeek;
     this._open=_open;
+    this._start=_start;
+    this._end=_end;
   }
 
   get dayOfWeek():number{return this._dayOfWeek;}

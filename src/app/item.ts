@@ -6,8 +6,16 @@ export class Item {
   private _itemName: string;
   private _vegetarian: boolean;
   private _itemPrice: number;
+  private _addToCart: boolean;
+  public get addToCart(): boolean {
+    return this._addToCart;
+  }
+  public set addToCart(value: boolean) {
+    this._addToCart = value;
+  }
 
-  constructor(_itemName:string,_vegetarian:boolean,_itemPrice:number){
+
+  constructor(_vegetarian=false,_itemName?:string,_itemPrice?:number, addToCart=false){
     this._itemName=_itemName;
     this._vegetarian=_vegetarian;
     this._itemPrice=_itemPrice;

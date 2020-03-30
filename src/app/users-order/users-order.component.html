@@ -1,0 +1,122 @@
+<span *ngIf='principleUser && provider'>
+  <app-navbar [user]='principleUser.userFirstName'></app-navbar>
+
+<div [hidden]='showCart'>
+  <div class="field-container">
+    <h1>{{provider.providerName}}</h1>
+  </div>
+  <!-- <div class="field-container">
+    <h2>Image Container</h2>
+  </div> -->
+
+  <div class="field-container">
+    <h2>Hours</h2>
+    <table class="table" *ngIf="hours.length !== 0">
+      <thead>
+        <th>Day Week</th>
+        <th>Open Time</th>
+        <th>Close time</th>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let hour of hours">
+          <td>{{ hour.dayOfWeek | dayOfWeek }}</td>
+          <td>{{ hour.start }}:00</td>
+          <td>{{ hour.end }}:00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr />
+  <div class="field-container">
+    <h2>Items</h2>
+    <table class="table" *ngIf="items.length !== 0">
+      <thead>
+        <th>Item Name</th>
+        <th>Vegetarian</th>
+        <th>Item Price</th>
+        <th>Add to Cart</th>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of items; let i = index">
+          <td>{{ item.itemName }}</td>
+          <td>{{ item.vegetarian ? "Veg" : "Non-Veg" }}</td>
+          <td>{{ item.itemPrice | currency }}</td>
+          <td><input type='checkbox' [name]='item.itemName' #add (change)='addToCart(i, add.checked)'></td>
+          <td>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br>
+
+    <a
+    [style.margin]="'0 5% 0 30%'"
+    mat-raised-button
+    color="accent"
+    (click)="cancel()"
+    >Cancel</a
+  >
+
+  <a
+    mat-raised-button
+    color="primary"
+    (click)='next()'
+    [disabled]="cartItems.length===0"
+    >Next</a
+  >
+  </div>
+</div>
+  <div [hidden]='!showCart'>
+
+    <div class="field-container">
+      <h1>Cart Confirmation</h1>
+    </div>
+
+    <div class="field-container">
+      <h2>Order</h2>
+      <table class="table" *ngIf="cartItems.length !== 0">
+        <thead>
+          <th>Item Name</th>
+          <th>Vegetarian</th>
+          <th>Item Price</th>
+          <th>Remove From Cart</th>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of cartItems; let i = index">
+            <td>{{ item.itemName }}</td>
+            <td>{{ item.vegetarian ? "Veg" : "Non-Veg" }}</td>
+            <td>{{ item.itemPrice | currency }}</td>
+            <button mat-raised-button (click)='deleteFromCart(i)'>Delete</button>
+            <td>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>Total: {{total|currency}}</h2>
+      </div>
+
+      <br>
+
+      <a
+      [style.margin]="'0 5% 0 30%'"
+      mat-raised-button
+      color="accent"
+      [disabled]="submitted"
+      (click)="cancel()"
+      >Cancel</a
+    >
+
+    <a
+      mat-raised-button
+      color="primary"
+      (click)='checkout()'
+      [disabled]="cartItems.length===0 || submitted"
+      >Checkout</a
+    >
+  </div>
+</span>

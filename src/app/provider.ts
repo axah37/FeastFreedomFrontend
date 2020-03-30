@@ -8,12 +8,12 @@ export class Provider {
     this._providerId = value;
   }
 
-  private _provderName: string;
-  public get provderName(): string {
-    return this._provderName;
+  private _providerName: string;
+  public get providerName(): string {
+    return this._providerName;
   }
-  public set provderName(value: string) {
-    this._provderName = value;
+  public set providerName(value: string) {
+    this._providerName = value;
   }
 
   private _providerEmail: string;
@@ -32,8 +32,15 @@ export class Provider {
     this._providerPassword = value;
   }
 
+  private _providerImg;
+  public get providerImg() {
+    return this._providerImg;
+  }
+  public set providerImg(value) {
+    this._providerImg = value;
+  }
   constructor(_providerName:string,_providerEmail:string,_providerPassword:string){
-    this._provderName=_providerName;
+    this._providerName=_providerName;
     this._providerEmail=_providerEmail;
     this._providerPassword=_providerPassword;
   }
