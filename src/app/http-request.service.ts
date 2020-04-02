@@ -11,7 +11,7 @@ import { Provider } from './provider';
   providedIn: 'root'
 })
 export class HttpRequestService {
-  url:string="http://localhost:8080"
+  url:string="http://localhost:8081"
   constructor(private http:HttpClient, private _auth:AuthenticateService) { }
 
   saveProvider(value):Observable<Provider>{
@@ -70,5 +70,9 @@ export class HttpRequestService {
 
   getProviderHours(id):Observable<Hour[]>{
     return this.http.get<Hour[]>(this.url+"/users/providers/hours/"+id+"?access_token="+localStorage.getItem('access_token')).pipe(catchError(this.errorHandler));
+  }
+
+  submitCart(value){
+    return this.http.post(this.url+"/users/cart?access_token="+localStorage.getItem('access_token'),value).pipe(catchError(this.errorHandler));
   }
 }

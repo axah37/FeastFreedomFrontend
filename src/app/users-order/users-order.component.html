@@ -5,10 +5,6 @@
   <div class="field-container">
     <h1>{{provider.providerName}}</h1>
   </div>
-  <!-- <div class="field-container">
-    <h2>Image Container</h2>
-  </div> -->
-
   <div class="field-container">
     <h2>Hours</h2>
     <table class="table" *ngIf="hours.length !== 0">
@@ -52,7 +48,6 @@
     </table>
 
     <br>
-
     <a
     [style.margin]="'0 5% 0 30%'"
     mat-raised-button
@@ -101,22 +96,29 @@
       </div>
 
       <br>
+      <form #cart='ngForm'>
+        <fieldset [ngModelGroup]="'items'" class="field-container" hidden>
+        <div *ngFor="let item of cartItems; let i=index" hidden>
+          <input [ngModel]='item' name='{{i}}'>
+        </div>
+        </fieldset>
+        <input [ngModel]='principleUser' name='user' hidden>
+        <a
+        [style.margin]="'0 5% 0 30%'"
+        mat-raised-button
+        color="accent"
+        [disabled]="submitted"
+        (click)="cancel()"
+        >Cancel</a
+      >
 
-      <a
-      [style.margin]="'0 5% 0 30%'"
-      mat-raised-button
-      color="accent"
-      [disabled]="submitted"
-      (click)="cancel()"
-      >Cancel</a
-    >
-
-    <a
-      mat-raised-button
-      color="primary"
-      (click)='checkout()'
-      [disabled]="cartItems.length===0 || submitted"
-      >Checkout</a
-    >
+      <button
+        mat-raised-button
+        color="primary"
+        (click)='checkout(cart)'
+        [disabled]="cartItems.length===0 || submitted"
+        >Checkout</button
+      >
+      </form>
   </div>
 </span>

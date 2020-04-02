@@ -33,14 +33,14 @@ export class ProviderHomepageComponent implements OnInit {
     private _auth: AuthenticateService,
     private _router: Router,
     private _snackBar: MatSnackBar,
-  ) {}
+  ) {localStorage.setItem('deactivate','true')}
 
   ngOnInit(): void {
     if (this._auth.validToken() !== null && !this._auth.validToken()) {
       this._auth.refreshToken().subscribe(() => {
         this._auth.principleProvider().subscribe(
           data => {
-            this.imgURI = 'http://localhost:8080/'+data.providerImg;
+            this.imgURI = 'http://localhost:8081/'+data.providerImg;
             this.provider = data;
             this._http.getItems(this.provider.providerId).subscribe(
               data => (this.items = data),
@@ -62,7 +62,8 @@ export class ProviderHomepageComponent implements OnInit {
     } else {
       this._auth.principleProvider().subscribe(
         data => {
-          this.imgURI = 'http://localhost:8080/'+data.providerImg;
+          console.log(data)
+          this.imgURI = 'http://localhost:8081/'+data.providerImg;
           this.provider = data;
           this._http.getItems(this.provider.providerId).subscribe(
             data => (this.items = data),

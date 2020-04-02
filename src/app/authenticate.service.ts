@@ -10,7 +10,7 @@ import { User } from './user';
 })
 export class AuthenticateService {
 
-  url:string="http://localhost:8080";
+  url:string="http://localhost:8081";
   public valid:boolean = false;
   constructor(private http:HttpClient) { }
 
@@ -44,16 +44,19 @@ export class AuthenticateService {
     localStorage.removeItem('cur_user');
     localStorage.removeItem('expires');
     localStorage.removeItem('authority')
+    localStorage.removeItem('deactivate')
     this.valid=false;
   }
 
   refreshToken(){
+   // this.logout()
     const headers =
     {
       headers:new HttpHeaders({
         "Authorization" : "Basic " + btoa("client:123456")
       })
     };
+    console.log('refresh')
     return this.http.post<{access_token:string,refresh_token:string}>(this.url+"/oauth/token?grant_type=refresh_token&refresh_token="+localStorage.getItem('refresh_token'),{},headers).pipe(tap(res =>{
       localStorage.setItem('access_token', res.access_token);
       localStorage.setItem('refresh_token', res.refresh_token);

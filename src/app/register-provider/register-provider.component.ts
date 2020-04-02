@@ -75,6 +75,7 @@ export class RegisterProviderComponent implements OnInit {
     this.submitted=true;
     let email = form.value.provider.providerEmail;
     let password = form.value.provider.providerPassword;
+    localStorage.setItem('deactivate','true')
     let snackbar=this._snackBar.open("Provider Is Registered, You will be redirected to Provider Homepage",null,{duration:1500})
     snackbar.afterDismissed().subscribe(()=>this._router.navigate(["/provider"]))
     this._http.saveProvider(form.value).subscribe(
@@ -84,8 +85,12 @@ export class RegisterProviderComponent implements OnInit {
         this._http.addProviderImage(this.provider.providerId, formData).subscribe(
           ()=>console.log("uploadedImage")
         )
-        this._auth.login(email, password).subscribe(
-          () => console.log('Logged Provider In')
+        this._auth.getAuthority(email).subscribe(
+          () => {
+            this._auth.login(email, password).subscribe(
+              () => console.log('Logged Provider In')
+            )
+          }
         )
     }
     );

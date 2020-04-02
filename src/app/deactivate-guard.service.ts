@@ -8,6 +8,10 @@ import { Observable } from 'rxjs';
 export class DeactivateGuardService implements CanDeactivate<any> {
 
   canDeactivate(): boolean | Observable<boolean>{
+    if(localStorage.getItem('deactivate')==='true'){
+      localStorage.removeItem('deactivate')
+      return true;
+    }
     return confirm("Your Information is not save, Continue?")
   }
 

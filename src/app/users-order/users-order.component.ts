@@ -7,6 +7,7 @@ import { AuthenticateService } from '../authenticate.service';
 import { HttpRequestService } from '../http-request.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-users-order',
@@ -110,15 +111,26 @@ export class UsersOrderComponent implements OnInit {
     this.cartItems.splice(i,1);
   }
 
-  checkout(){
+  checkout(form:NgForm){
     if(this.cartItems.length !== 0 && this.showCart){
+      localStorage.setItem('deactivate','true')
       let snackBarRef = this._snackBar.open("Order Has Been Placed","Going Home",{duration:1500})
       this.submitted=true;
       snackBarRef.afterDismissed().subscribe(() => this._router.navigate(['/users']))
+      if (this._auth.validToken() !== null && !this._auth.validToken()) {
+        this._auth.refreshToken().subscribe(() => {
+          () => {
+            this._http.submitCart(form.value).subscribe(() => console.log('saved'))
+          }
+        })
+      }else{
+        this._http.submitCart(form.value).subscribe(() => console.log('saved'))
+      }
     }
   }
   onSubmit(form){
     console.log(this.items)
+    localStorage.setItem('deactivate','true')
     for(let item of this.items){
       console.log(item)
       console.log(form.value[item.itemName])

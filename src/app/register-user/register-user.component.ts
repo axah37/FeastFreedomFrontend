@@ -49,6 +49,7 @@ export class RegisterUserComponent implements OnInit {
     let email=this.userForm.value.userEmail
     let password=this.userForm.value.userPassword
     this.submitted=true;
+    localStorage.setItem('deactivate','true')
     let snack = this._snackBar.open('User has been Registered, Redirect to User Homepage',null,{duration:1500})
     snack.afterDismissed().subscribe(
       () => this._router.navigate(['/users'])
@@ -57,7 +58,13 @@ export class RegisterUserComponent implements OnInit {
       (data) => console.log(data),
       (error) => console.log(error),
       () => {
-        this._auth.login(email,password).subscribe(()=>console.log("Logged In User"))
+        this._auth.getAuthority(email).subscribe(
+          () => {
+            this._auth.login(email, password).subscribe(
+              () => console.log('Logged User In')
+            )
+          }
+        )
       }
     )
   }
