@@ -10,7 +10,7 @@ import { User } from './user';
 })
 export class AuthenticateService {
 
-  url:string="http://localhost:8081";
+  url:string="http://15.222.224.5:8081";
   public valid:boolean = false;
   constructor(private http:HttpClient) { }
 

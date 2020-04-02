@@ -40,7 +40,7 @@ export class ProviderHomepageComponent implements OnInit {
       this._auth.refreshToken().subscribe(() => {
         this._auth.principleProvider().subscribe(
           data => {
-            this.imgURI = 'http://localhost:8081/'+data.providerImg;
+            this.imgURI = 'http://15.222.224.5:8081/'+data.providerImg;
             this.provider = data;
             this._http.getItems(this.provider.providerId).subscribe(
               data => (this.items = data),
@@ -63,7 +63,7 @@ export class ProviderHomepageComponent implements OnInit {
       this._auth.principleProvider().subscribe(
         data => {
           console.log(data)
-          this.imgURI = 'http://localhost:8081/'+data.providerImg;
+          this.imgURI = 'http://15.222.224.5:8081/'+data.providerImg;
           this.provider = data;
           this._http.getItems(this.provider.providerId).subscribe(
             data => (this.items = data),

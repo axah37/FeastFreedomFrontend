@@ -11,7 +11,7 @@ import { Provider } from './provider';
   providedIn: 'root'
 })
 export class HttpRequestService {
-  url:string="http://localhost:8081"
+  url:string="http://15.222.224.5:8081"
   constructor(private http:HttpClient, private _auth:AuthenticateService) { }
 
   saveProvider(value):Observable<Provider>{
